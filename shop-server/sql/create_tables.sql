@@ -1,11 +1,11 @@
 create table categories (
-    id int8 not null,
+    id serial not null,
     name varchar(255) not null,
     primary key (id)
 );
 
 create table localized_product (
-    id int8 not null,
+    id serial not null,
     description varchar(255),
     locale varchar(255) not null,
     name varchar(255) not null,
@@ -13,7 +13,7 @@ create table localized_product (
 );
 
 create table opening_hours (
-    id int8 not null,
+    id serial not null,
     close_at time not null,
     day int4 not null check (day>=1 AND day<=7),
     open_at time not null,
@@ -21,7 +21,7 @@ create table opening_hours (
 );
 
 create table products (
-    id int8 not null,
+    id serial not null,
     price float4 not null,
     shop_id int8,
     primary key (id)
@@ -33,12 +33,12 @@ create table products_categories (
 );
 
 create table products_localized_product (
-    product_id int8 not null,
+    product_id serial not null,
     localized_product_id int8 not null
 );
 
 create table shops (
-    id int8 not null,
+    id serial not null,
     created_at date not null,
     in_vacations boolean not null,
     name varchar(255) not null,
@@ -46,12 +46,12 @@ create table shops (
 );
 
 create table shops_opening_hours (
-    shop_id int8 not null,
+    shop_id serial not null,
     opening_hours_id int8 not null
 );
 
 create table translation (
-    id int8 not null,
+    id serial not null,
     field_type varchar(255) not null,
     language varchar(255) not null,
     value varchar(255) not null,
