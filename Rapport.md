@@ -8,6 +8,8 @@ Voici les travaux qui étaient à réaliser :
 - Résolution d'un bug de gestion des conflits horaires des boutiques.
 - Ajout d'une recherche fulltext avec Elastic Search.
 
+Dépôt Github du projet : [https://github.com/KinderPinGuiin/fullstack-tp3/tree/develop](https://github.com/KinderPinGuiin/fullstack-tp3/tree/develop)
+
 ## Mise à jour des frameworks et librairies à la version LTS
 
 Deux frameworks (ou librairies) majeurs ont été utilisées au sein de ce projet :
