@@ -1,5 +1,6 @@
 package fr.fullstack.shopapp.service;
 
+import fr.fullstack.shopapp.model.OpeningHoursShop;
 import fr.fullstack.shopapp.model.Product;
 import fr.fullstack.shopapp.model.Shop;
 import fr.fullstack.shopapp.repository.ShopRepository;
@@ -26,6 +27,10 @@ public class ShopService {
     @Transactional
     public Shop createShop(Shop shop) throws Exception {
         try {
+            // Check if the shop opening hours are valid
+            if (this.shopHaveOpeningHoursConflict(shop)) {
+                throw new Exception("Les horaires de la boutique ne doivent pas se superposer.");
+            }
             Shop newShop = shopRepository.save(shop);
             // Refresh the entity after the save. Otherwise, @Formula does not work.
             em.flush();
@@ -164,4 +169,36 @@ public class ShopService {
 
         return null;
     }
+
+    /**
+     * Check that the shop opening hours doesn't overlap each other.
+     *
+     * @param  shop The shop th check the opening hours.
+     * @return      True if opening hours overlaps, false otherwise.
+     */
+    private boolean shopHaveOpeningHoursConflict(Shop shop) {
+        List<OpeningHoursShop> openingHours = shop.getOpeningHours();
+        for (OpeningHoursShop openingHour : openingHours) {
+            for (OpeningHoursShop otherOpeningHour : shop.getOpeningHours()) {
+                if (!openingHour.equals(otherOpeningHour) && this.hourHaveConflictWith(openingHour, otherOpeningHour)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Check if the two given hours overlaps.
+     *
+     * @param  openingHour1 The first hour.
+     * @param  openingHour2 The second hour.
+     * @return              True if the opening hours overlaps, false otherwise.
+     */
+    private boolean hourHaveConflictWith(OpeningHoursShop openingHour1, OpeningHoursShop openingHour2) {
+        return openingHour1.getDay() == openingHour2.getDay()
+            && openingHour1.getOpenAt().isBefore(openingHour2.getCloseAt())
+            && openingHour1.getCloseAt().isAfter(openingHour2.getOpenAt());
+    }
+
 }
